@@ -5,32 +5,25 @@ import WorkspaceClient from './WorkspaceClient';
 import { InterviewProvider } from '@/context/InterviewContext';
 
 interface WorkspacePageProps {
-  params: Promise<{
-    slug: string;
-  }>;
+  params: Promise<{ slug: string }>;
 }
 
 export const dynamic = 'force-dynamic';
 
 export default async function ProblemWorkspacePage({ params }: WorkspacePageProps) {
-  const resolvedParams = await params;
+  const { slug } = await params;
+  const question = await prisma.question.findUnique({ where: { slug } });
 
-  // Fetch specific question details matching the routing parameters
-  const question = await prisma.question.findUnique({
-    where: { slug: resolvedParams.slug },
-  });
-
-  if (!question) {
-    notFound();
-  }
+  if (!question) notFound();
 
   return (
     <InterviewProvider>
-      <div className="flex h-full min-h-screen flex-col bg-slate-50 overflow-hidden">
+      <div className="flex h-screen flex-col bg-slate-50">
         <TopNav />
-
-        {/* Pass down database records into client state engine container */}
-        <WorkspaceClient question={question} />
+        {/* Removed max-width constraint to allow full expansion */}
+        <main className="flex-1 w-full overflow-hidden">
+          <WorkspaceClient question={question} />
+        </main>
       </div>
     </InterviewProvider>
   );
