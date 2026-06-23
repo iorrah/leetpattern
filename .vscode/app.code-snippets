@@ -1,0 +1,20 @@
+{
+  "NextJS React Query Page": {
+    "scope": "typescriptreact",
+    "prefix": "next-rq-page",
+    "body": [
+      "import { useQuery } from '@tanstack/react-query';",
+      "",
+      "export default function ${1:PageName}() {",
+      "  // Copilot will easily complete the query logic here",
+      "  const { data, isLoading } = useQuery({",
+      "    queryKey: ['${2:key}'],",
+      "    queryFn: async () => { /* ... */ }",
+      "  });",
+      "",
+      "  return <div className=\"p-4\">$0</div>;",
+      "}",
+    ],
+    "description": "Standardized Next.js page template for Copilot tracking",
+  },
+}

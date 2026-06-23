@@ -1,0 +1,42 @@
+{
+  "name": "leetpattern",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "tree": "node print-tree.js",
+    "cp": "node cp.js"
+  },
+  "dependencies": {
+    "@heroicons/react": "2.2.0",
+    "@libsql/client": "0.17.3",
+    "@prisma/adapter-libsql": "7.8.0",
+    "@prisma/adapter-pg": "7.8.0",
+    "@prisma/client": "7.8.0",
+    "@tanstack/react-query": "5.101.0",
+    "next": "16.2.7",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "dotenv": "17.4.2",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.7",
+    "eslint-config-prettier": "10.1.8",
+    "prettier": "3.8.4",
+    "prisma": "7.8.0",
+    "tailwindcss": "^4",
+    "ts-node": "10.9.2",
+    "typescript": "^5"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  }
+}
