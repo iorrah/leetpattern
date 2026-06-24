@@ -180,12 +180,15 @@ export default function HomePage() {
       {/* Footer Section */}
       <footer className="border-t border-slate-200 bg-white">
         <div className="mx-auto max-w-7xl px-6 py-12 md:flex md:items-center md:justify-between lg:px-8">
-          <div className="mt-8 md:order-1 md:mt-0">
-            <p className="text-center text-xs leading-5 text-slate-500">
-              &copy; {new Date().getFullYear()} LeetPattern. Built for production engineers.
-              Open-source structure framework layout.
-            </p>
-          </div>
+          <p className="w-full text-center text-xs leading-5 text-slate-500 mt-8 md:order-1 md:mt-0">
+            &copy; {new Date().getFullYear()} LeetPattern is free. Find the source code on{' '}
+            <a
+              href="https://github.com/iorrah/leetpattern"
+              className="text-indigo-600 hover:text-indigo-500"
+            >
+              GitHub
+            </a>
+          </p>
         </div>
       </footer>
     </div>
