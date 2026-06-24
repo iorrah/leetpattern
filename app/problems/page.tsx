@@ -20,7 +20,7 @@ export default async function ProblemsPage() {
         {/* Header Block */}
         <div className="md:flex md:items-center md:justify-between border-b border-slate-200 pb-6 mb-10">
           <div className="min-w-0 flex-1">
-            <h2 className="text-2xl font-bold leading-7 text-slate-900 sm:truncate sm:text-3xl sm:tracking-tight">
+            <h2 className="text-2xl font-bold text-slate-900 sm:truncate sm:text-3xl sm:tracking-tight">
               Select Your Coding Challenge
             </h2>
             <p className="mt-2 text-sm text-slate-500">

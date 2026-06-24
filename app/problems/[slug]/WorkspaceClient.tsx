@@ -11,40 +11,44 @@ import ChatPanel from '@/components/workspace/ChatPanel';
 interface WorkspaceClientProps {
   question: {
     title: string;
+    difficulty: string;
     problemStatement: string;
+    constraints: string;
     initialCode: string;
     slug: string;
   };
+  sessionId: string; // Ensure this is passed from your page.tsx
 }
 
-export default function WorkspaceClient({ question }: WorkspaceClientProps) {
+export default function WorkspaceClient({ question, sessionId }: WorkspaceClientProps) {
   const context = useInterview() as any;
   const currentStep = context?.currentStep ?? 1;
   const [inputValue, setInputValue] = useState<string>(question.initialCode || '');
 
-  // Define logic for UI switching
   const isDiscoveryPhase = currentStep === 1 || currentStep === 2;
 
   /**
-   * Orchestrates the transition logic.
-   * Informs the user that the AI Coach is evaluating their input for progression.
+   * Orchestrates the backend API call.
+   * Your route.ts already updates the DB step, so we just trigger a refresh.
    */
   const handleSendMessage = async (msg: string): Promise<boolean> => {
     try {
-      // Logic: Send message to your backend/AI validator
-      // The AI evaluates the input and returns { next_step: boolean }
-      /* 
-      const response = await fetch('/api/interview/validate', {
+      const response = await fetch('/api/ai', {
         method: 'POST',
-        body: JSON.stringify({ message: msg, step: currentStep }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId,
+          questionSlug: question.slug,
+          currentStep,
+          userInput: msg,
+        }),
       });
-      const { next_step } = await response.json();
-      */
 
-      const next_step = true; // Placeholder: Replace with actual API response
+      const data = await response.json();
 
-      if (next_step) {
-        context.advanceStep();
+      if (data.success) {
+        // Refresh session context so the UI reflects the new step from the DB
+        context.refreshSession?.();
         return true;
       }
       return false;
@@ -56,15 +60,12 @@ export default function WorkspaceClient({ question }: WorkspaceClientProps) {
 
   return (
     <div className="flex h-full w-full bg-white text-slate-900 overflow-hidden">
-      {/* Sidebar: Navigation for the 6-step flow */}
       <div className="w-80 flex-shrink-0 border-r border-slate-200">
         <StepTracker onReset={() => context?.resetSession(question.slug)} />
       </div>
 
-      {/* Main Workspace Layout */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Left Panel: Guidance and Problem Details */}
-        <div className="flex-1 overflow-y-auto p-8 border-r border-slate-200 bg-slate-50">
+        <div className="flex flex-col flex-1 gap-8 overflow-y-auto p-8 border-r border-slate-200 bg-slate-50">
           <StepGuidance currentStep={currentStep} />
           <ProblemDescription
             title={question.title}
@@ -74,14 +75,11 @@ export default function WorkspaceClient({ question }: WorkspaceClientProps) {
           />
         </div>
 
-        {/* Right Panel: Conditional Interface */}
         <div className="w-1/2 flex flex-col bg-white">
           {isDiscoveryPhase ? (
             <div className="flex flex-col h-full">
-              {/* Informational Header for the user */}
               <div className="px-4 py-2 bg-amber-50 border-b border-amber-200 text-[10px] text-amber-800 font-medium uppercase tracking-widest text-center">
-                The AI Coach will allow you to move to the next step once you have understood the
-                problem
+                AI Coach evaluating input for next-step approval
               </div>
               <ChatPanel onSendMessage={handleSendMessage} />
             </div>
