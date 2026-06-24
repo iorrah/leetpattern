@@ -57,21 +57,25 @@ export default function StepGuidance({ currentStep }: { currentStep: number }) {
   const step = STEP_INSTRUCTIONS[currentStep];
 
   return (
-    <div className="mb-8 p-6 bg-indigo-50 border border-indigo-200 rounded-xl shadow-sm">
-      <h2 className="text-md font-bold text-indigo-900 mb-4 border-b border-indigo-200 pb-2">
-        {step.title}
-      </h2>
-      <div className="space-y-3 text-sm text-indigo-800">
-        <p>
-          <span className="font-bold">Goal:</span> {step.goal}
-        </p>
-        <p>
-          <span className="font-bold">Action:</span> {step.action}
-        </p>
-        <p>
-          <span className="font-bold">Success Indicator:</span> {step.success}
-        </p>
-      </div>
-    </div>
+    <section className="flex flex-col gap-4">
+      <h1 className="text-3xl font-extrabold text-slate-900">Current Step</h1>
+
+      <section className="bg-white p-8 rounded-xl border border-slate-200">
+        <h3 className="text-lg font-black text-slate-900 mb-2">{step.title}</h3>
+        <div className="text-base text-slate-700 leading-relaxed whitespace-pre-line">
+          <div className="space-y-3 text-sm">
+            <p>
+              <span className="font-bold">Goal:</span> {step.goal}
+            </p>
+            <p>
+              <span className="font-bold">Action:</span> {step.action}
+            </p>
+            <p>
+              <span className="font-bold">Success Indicator:</span> {step.success}
+            </p>
+          </div>
+        </div>
+      </section>
+    </section>
   );
 }
