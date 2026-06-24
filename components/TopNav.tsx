@@ -6,7 +6,7 @@ import { CommandLineIcon } from '@heroicons/react/24/solid';
 
 export default function TopNav() {
   const pathname = usePathname();
-  const isProblemPage = pathname.includes('/problems/');
+  const isProblemPage = pathname.includes('/problems');
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md">
