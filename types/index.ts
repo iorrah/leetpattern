@@ -1,4 +1,4 @@
-export type { Difficulty, ProblemExample, Question } from './question';
+export type { Difficulty, Question } from './question';
 
 export interface StepHistory {
   step: number;

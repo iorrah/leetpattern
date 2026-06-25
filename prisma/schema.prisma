@@ -7,42 +7,18 @@ generator client {
 }
 
 model Question {
-  id               String   @id @default(uuid())
+  id               String @id @default(uuid())
 
   title            String
-  slug             String   @unique
+  slug             String @unique
   difficulty       String
 
   problemStatement String
+  constraints      String
+  examples         String
   initialCode      String
 
-  constraints      Constraint[]
-  examples         Example[]
-
   sessions         InterviewSession[]
-}
-
-model Constraint {
-  id         String   @id @default(uuid())
-
-  order       Int
-  content     String
-
-  questionId  String
-  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
-}
-
-model Example {
-  id          String   @id @default(uuid())
-
-  order       Int
-
-  input       String
-  output      String
-  explanation String
-
-  questionId  String
-  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 }
 
 model InterviewSession {
