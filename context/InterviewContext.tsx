@@ -21,11 +21,13 @@ interface InterviewContextType {
 
 const InterviewContext = createContext<InterviewContextType | undefined>(undefined);
 
+const currentTime = Date.now();
+
 export function InterviewProvider({ children }: { children: React.ReactNode }) {
   const [currentStep, setStep] = useState<number>(1);
   const [history, setHistory] = useState<LogEntry[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [startTime, setStartTime] = useState<number>(Date.now()); // 💡 Ensure timestamp is real integer, never undefined
+  const [startTime, setStartTime] = useState<number>(currentTime);
 
   const initializeSession = (slug: string) => {
     console.log('⚙️ [CONTEXT WORK] initializeSession requested for question slug:', slug);

@@ -1,12 +1,4 @@
-export interface Question {
-  id: string;
-  title: string;
-  slug: string;
-  difficulty: string;
-  problemStatement: string;
-  initialCode: string;
-  constraints: string;
-}
+export type { Difficulty, ProblemExample, Question } from './question';
 
 export interface StepHistory {
   step: number;

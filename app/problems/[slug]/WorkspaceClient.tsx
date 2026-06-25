@@ -7,21 +7,15 @@ import StepGuidance from '@/components/workspace/StepGuidance';
 import ProblemDescription from '@/components/workspace/ProblemDescription';
 import CodeEditorPanel from '@/components/workspace/CodeEditorPanel';
 import ChatPanel from '@/components/workspace/ChatPanel';
+import type { Question } from '@/types';
 
 interface WorkspaceClientProps {
-  question: {
-    title: string;
-    difficulty: string;
-    problemStatement: string;
-    constraints: string;
-    initialCode: string;
-    slug: string;
-  };
-  sessionId: string; // Ensure this is passed from your page.tsx
+  question: Question;
+  sessionId?: string;
 }
 
 export default function WorkspaceClient({ question, sessionId }: WorkspaceClientProps) {
-  const context = useInterview() as any;
+  const context = useInterview();
   const currentStep = context?.currentStep ?? 1;
   const [inputValue, setInputValue] = useState<string>(question.initialCode || '');
 
@@ -48,7 +42,7 @@ export default function WorkspaceClient({ question, sessionId }: WorkspaceClient
 
       if (data.success) {
         // Refresh session context so the UI reflects the new step from the DB
-        context.refreshSession?.();
+        // context.refreshSession?.();
         return true;
       }
       return false;
@@ -67,12 +61,7 @@ export default function WorkspaceClient({ question, sessionId }: WorkspaceClient
       <div className="flex flex-1 overflow-hidden">
         <div className="flex flex-col flex-1 gap-8 overflow-y-auto p-8 border-r border-slate-200 bg-slate-50">
           <StepGuidance currentStep={currentStep} />
-          <ProblemDescription
-            title={question.title}
-            difficulty={question.difficulty}
-            problemStatement={question.problemStatement}
-            constraints={question.constraints}
-          />
+          <ProblemDescription question={question} />
         </div>
 
         <div className="w-1/2 flex flex-col bg-white">
@@ -86,7 +75,9 @@ export default function WorkspaceClient({ question, sessionId }: WorkspaceClient
           ) : (
             <CodeEditorPanel
               value={inputValue}
-              onChange={setInputValue}
+              onChange={(value: string | undefined) => {
+                setInputValue(value || '');
+              }}
               onSubmit={() => context?.submitStep(inputValue)}
             />
           )}
