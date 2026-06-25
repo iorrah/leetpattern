@@ -1,9 +1,23 @@
 export type Difficulty = 'Easy' | 'Medium' | 'Hard';
 
 export interface ProblemExample {
+  id: string;
+
+  order: number;
+
   input: string;
+
   output: string;
+
   explanation: string;
+}
+
+export interface ProblemConstraint {
+  id: string;
+
+  order: number;
+
+  content: string;
 }
 
 export interface Question {
@@ -17,20 +31,9 @@ export interface Question {
 
   problemStatement: string;
 
-  /**
-   * Temporary string representation.
-   *
-   * In the next step we'll migrate this to a structured array.
-   */
-  constraints: string;
-
-  /**
-   * Temporary placeholder.
-   *
-   * In the next step this will become structured data
-   * coming directly from Prisma.
-   */
-  examples?: ProblemExample[];
-
   initialCode: string;
+
+  constraints: ProblemConstraint[];
+
+  examples: ProblemExample[];
 }
