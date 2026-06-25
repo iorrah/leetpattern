@@ -11,73 +11,73 @@ import type { Question } from '@/types';
 
 interface WorkspaceClientProps {
   question: Question;
-  sessionId?: string;
 }
 
-export default function WorkspaceClient({ question, sessionId }: WorkspaceClientProps) {
+export default function WorkspaceClient({ question }: WorkspaceClientProps) {
   const context = useInterview();
+
   const currentStep = context?.currentStep ?? 1;
-  const [inputValue, setInputValue] = useState<string>(question.initialCode || '');
+
+  const [inputValue, setInputValue] = useState(question.initialCode);
 
   const isDiscoveryPhase = currentStep === 1 || currentStep === 2;
 
-  /**
-   * Orchestrates the backend API call.
-   * Your route.ts already updates the DB step, so we just trigger a refresh.
-   */
-  const handleSendMessage = async (msg: string): Promise<boolean> => {
+  const handleSendMessage = async (message: string): Promise<string> => {
     try {
       const response = await fetch('/api/ai', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
-          sessionId,
-          questionSlug: question.slug,
+          question,
           currentStep,
-          userInput: msg,
+          userInput: message,
         }),
       });
 
+      if (!response.ok) {
+        return 'Something went wrong.';
+      }
+
       const data = await response.json();
 
-      if (data.success) {
-        // Refresh session context so the UI reflects the new step from the DB
-        // context.refreshSession?.();
-        return true;
-      }
-      return false;
+      return data.reply ?? 'No response.';
     } catch (error) {
-      console.error('Validation error:', error);
-      return false;
+      console.error(error);
+      return 'Something went wrong.';
     }
   };
 
+  const handleContinue = () => {
+    context?.setStep((step) => Math.min(step + 1, 6));
+  };
+
   return (
-    <div className="flex h-full w-full bg-white text-slate-900 overflow-hidden">
+    <div className="flex h-full w-full overflow-hidden bg-white text-slate-900">
       <div className="w-80 flex-shrink-0 border-r border-slate-200">
         <StepTracker onReset={() => context?.resetSession(question.slug)} />
       </div>
 
       <div className="flex flex-1 overflow-hidden">
-        <div className="flex flex-col flex-1 gap-8 overflow-y-auto p-8 border-r border-slate-200 bg-slate-50">
+        <div className="flex flex-1 flex-col gap-8 overflow-y-auto border-r border-slate-200 bg-slate-50 p-8">
           <StepGuidance currentStep={currentStep} />
           <ProblemDescription question={question} />
         </div>
 
-        <div className="w-1/2 flex flex-col bg-white">
+        <div className="flex w-1/2 flex-col bg-white">
           {isDiscoveryPhase ? (
-            <div className="flex flex-col h-full">
-              <div className="px-4 py-2 bg-amber-50 border-b border-amber-200 text-[10px] text-amber-800 font-medium uppercase tracking-widest text-center">
-                AI Coach evaluating input for next-step approval
+            <>
+              <div className="border-b border-amber-200 bg-amber-50 px-4 py-2 text-center text-[10px] font-medium uppercase tracking-widest text-amber-800">
+                AI Coach
               </div>
-              <ChatPanel onSendMessage={handleSendMessage} />
-            </div>
+
+              <ChatPanel onSendMessage={handleSendMessage} onContinue={handleContinue} />
+            </>
           ) : (
             <CodeEditorPanel
               value={inputValue}
-              onChange={(value: string | undefined) => {
-                setInputValue(value || '');
-              }}
+              onChange={(value) => setInputValue(value || '')}
               onSubmit={() => context?.submitStep(inputValue)}
             />
           )}

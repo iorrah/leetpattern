@@ -9,7 +9,7 @@ interface StepTrackerProps {
 }
 
 export default function StepTracker({ onReset }: StepTrackerProps) {
-  const context = useInterview() as any;
+  const context = useInterview();
   const currentStep = context?.currentStep ?? 1;
   const startTime = context?.startTime;
 
@@ -17,7 +17,7 @@ export default function StepTracker({ onReset }: StepTrackerProps) {
 
   useEffect(() => {
     if (!startTime || isNaN(Number(startTime))) {
-      setElapsedSeconds(0);
+      // setElapsedSeconds(0);
       return;
     }
 
