@@ -67,7 +67,7 @@ export default function ChatPanel({ onSendMessage, onContinue }: ChatPanelProps)
         {messages.map((message, index) => (
           <div
             key={index}
-            className={`group relative max-w-[85%] rounded-lg p-3 pr-10 text-sm whitespace-pre-wrap ${
+            className={`group relative max-w-[85%] rounded-lg p-6 pr-10 text-sm whitespace-pre-wrap ${
               message.sender === 'user'
                 ? 'ml-auto bg-indigo-600 text-white'
                 : 'border border-slate-200 bg-white text-slate-700'
