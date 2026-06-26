@@ -22,19 +22,21 @@ model Question {
 }
 
 model InterviewSession {
-  id           String   @id @default(uuid())
+  id           String @id @default(uuid())
 
-  questionSlug String
+  questionSlug String @unique
 
-  currentStep  Int      @default(1)
+  currentStep  Int @default(1)
 
   history      String
+
+  chatHistory  String @default("[]")
 
   createdAt    DateTime @default(now())
 
   updatedAt    DateTime @updatedAt
 
-  question      Question? @relation(fields: [questionSlug], references: [slug])
+  question Question? @relation(fields: [questionSlug], references: [slug])
 
   @@index([questionSlug])
 }
