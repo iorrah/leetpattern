@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "tree": "node print-tree.js",
-    "cp": "node cp.js"
+    "cp": "node cp.js",
+    "cx": "node context.js"
   },
   "dependencies": {
     "@google/genai": "2.8.0",
